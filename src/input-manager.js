@@ -1,4 +1,4 @@
-import * as PIXI from 'pixi.js'
+import { Point, Rectangle } from '@pixi/math'
 
 /**
  * @typedef ViewportTouch
@@ -29,7 +29,7 @@ export class InputManager {
     addListeners() {
         this.viewport.interactive = true
         if (!this.viewport.forceHitArea) {
-            this.viewport.hitArea = new PIXI.Rectangle(0, 0, this.viewport.worldWidth, this.viewport.worldHeight)
+            this.viewport.hitArea = new Rectangle(0, 0, this.viewport.worldWidth, this.viewport.worldHeight)
         }
         this.viewport.on('pointerdown', this.down, this)
         this.viewport.on('pointermove', this.move, this)
@@ -166,7 +166,7 @@ export class InputManager {
      * @return {PIXI.Point}
      */
     getPointerPosition(event) {
-        let point = new PIXI.Point()
+        let point = new Point()
         if (this.viewport.options.interaction) {
             this.viewport.options.interaction.mapPositionToPoint(point, event.clientX, event.clientY)
         }

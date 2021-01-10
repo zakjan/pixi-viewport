@@ -1,4 +1,7 @@
-import * as PIXI from 'pixi.js'
+import type { Container, DisplayObject } from '@pixi/display'
+import type { InteractionManager, InteractionEvent } from '@pixi/interaction'
+import type { Rectangle, Circle, Ellipse, Polygon, RoundedRectangle, Point } from '@pixi/math'
+import type { Ticker } from '@pixi/ticker'
 
 type DirectionType = 'all' | 'x' | 'y'
 type UnderflowType = 'center' | 'top' | 'left' | 'right' | 'bottom' | (string & {})
@@ -16,15 +19,15 @@ type KeyCodeType = 'ControlRight' | 'ControlLeft' | 'ShiftRight' | 'ShiftLeft' |
 
 interface ViewportOptions {
     divWheel?: HTMLElement
-    forceHitArea?: PIXI.Rectangle | PIXI.Circle | PIXI.Ellipse | PIXI.Polygon | PIXI.RoundedRectangle
-    interaction?: PIXI.InteractionManager
+    forceHitArea?: Rectangle | Circle | Ellipse | Polygon | RoundedRectangle
+    interaction?: InteractionManager
     screenHeight?: number
     screenWidth?: number
     threshold?: number
     passiveWheel?: boolean
     stopPropagation?: boolean
     noTicker?: boolean
-    ticker?: PIXI.Ticker
+    ticker?: Ticker
     worldHeight?: number
     worldWidth?: number
     disableOnContextMenu?: boolean
@@ -47,7 +50,7 @@ interface DragOptions {
 interface PinchOptions {
     percent?: number
     noDrag?: boolean
-    center?: PIXI.Point
+    center?: Point
     factor?: number
 }
 
@@ -102,7 +105,7 @@ interface FollowOptions {
 interface WheelOptions {
     percent?: number
     reverse?: boolean
-    center?: PIXI.Point
+    center?: Point
     smooth?: number
     interrupt?: boolean
     lineHeight?: number
@@ -132,7 +135,7 @@ interface MouseEdgesOptions {
 }
 
 interface SnapZoomOptions {
-    center?: PIXI.Point
+    center?: Point
     ease?: string | Function
     forceStart?: boolean
     height?: number
@@ -145,7 +148,7 @@ interface SnapZoomOptions {
 
 interface AnimateOptions {
     time?: number
-    position?: PIXI.Point
+    position?: Point
     width?: number
     height?: number
     scale?: number
@@ -164,10 +167,10 @@ interface OutOfBounds {
 }
 
 interface ClickEventData {
-    event: PIXI.InteractionEvent
-    screen: PIXI.Point
+    event: InteractionEvent
+    screen: Point
     viewport: Viewport
-    world: PIXI.Point
+    world: Point
 }
 
 interface WheelData {
@@ -189,7 +192,7 @@ interface WheelEventData {
 interface ZoomedEventData {
     type: ZoomedEventSourceType
     viewport: Viewport
-    center?: PIXI.Point // used with pinch
+    center?: Point // used with pinch
 }
 
 interface lastViewport {
@@ -199,7 +202,7 @@ interface lastViewport {
     y: number
 }
 
-export declare class Viewport extends PIXI.Container {
+export declare class Viewport extends Container {
     screenWidth: number
     screenHeight: number
 
@@ -208,10 +211,10 @@ export declare class Viewport extends PIXI.Container {
     worldScreenWidth: number
     worldScreenHeight: number
 
-    forceHitArea?: PIXI.Rectangle | PIXI.Circle | PIXI.Ellipse | PIXI.Polygon | PIXI.RoundedRectangle
+    forceHitArea?: Rectangle | Circle | Ellipse | Polygon | RoundedRectangle
 
-    center: PIXI.Point
-    corner: PIXI.Point
+    center: Point
+    corner: Point
 
     right: number
     left: number
@@ -240,17 +243,17 @@ export declare class Viewport extends PIXI.Container {
     update(elapsed: number): void
     resize(screenWidth: number, screenHeight: number, worldWidth?: number, worldHeight?: number): void
 
-    toWorld(p: PIXI.Point): PIXI.Point
-    toWorld(x: number, y: number): PIXI.Point
-    toScreen(p: PIXI.Point): PIXI.Point
-    toScreen(x: number, y: number): PIXI.Point
+    toWorld(p: Point): Point
+    toWorld(x: number, y: number): Point
+    toScreen(p: Point): Point
+    toScreen(x: number, y: number): Point
 
-    getPointerPosition(event: PIXI.InteractionEvent): PIXI.Point
-    getPointerPosition(event: WheelEvent): PIXI.Point
+    getPointerPosition(event: InteractionEvent): Point
+    getPointerPosition(event: WheelEvent): Point
 
-    moveCenter(p: PIXI.Point): this
+    moveCenter(p: Point): this
     moveCenter(x: number, y: number): this
-    moveCorner(p: PIXI.Point): this
+    moveCorner(p: Point): this
     moveCorner(x: number, y: number): this
 
     findWidth(width: number): number
@@ -280,7 +283,7 @@ export declare class Viewport extends PIXI.Container {
     pinch(options?: PinchOptions): this
     snap(x: number, y: number, options?: SnapOptions): this
     snapZoom(options?: SnapZoomOptions): this
-    follow(target: PIXI.DisplayObject, options?: FollowOptions): this
+    follow(target: DisplayObject, options?: FollowOptions): this
     wheel(options?: WheelOptions): this
     clampZoom(options?: ClampZoomOptions): this
     mouseEdges(options?: MouseEdgesOptions): this
@@ -289,13 +292,13 @@ export declare class Viewport extends PIXI.Container {
     // Events
     on(
         event: 'added' | 'removed',
-        fn: (container: PIXI.Container) => void,
+        fn: (container: Container) => void,
         context?: any
     ): this
     // Events
     on(
-        event: PIXI.InteractionEventTypes,
-        fn: (event: PIXI.InteractionEvent) => void,
+        event: InteractionEventTypes,
+        fn: (event: InteractionEvent) => void,
         context?: any
     ): this
     on(
@@ -347,9 +350,9 @@ export declare class Viewport extends PIXI.Container {
 
 export declare class Plugin {
     constructor(viewport: Viewport)
-    down(event: PIXI.InteractionEvent): void
-    up(event: PIXI.InteractionEvent): void
-    move(event: PIXI.InteractionEvent): void
+    down(event: InteractionEvent): void
+    up(event: InteractionEvent): void
+    move(event: InteractionEvent): void
     wheel(event: WheelEvent): void
     update(): void
     resize(): void

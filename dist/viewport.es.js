@@ -1,5 +1,6 @@
-import * as PIXI from 'pixi.js';
-import { Rectangle, Point, Container, VERSION } from 'pixi.js';
+import { Container } from '@pixi/display';
+import { Rectangle, Point } from '@pixi/math';
+import { Ticker } from '@pixi/ticker';
 
 /**
  * @typedef ViewportTouch
@@ -2875,23 +2876,7 @@ class Viewport extends Container {
         super();
         this.options = Object.assign({}, viewportOptions, options);
 
-        // needed to pull this out of viewportOptions because of pixi.js v4 support (which changed from PIXI.ticker.shared to PIXI.Ticker.shared...sigh)
-        if (options.ticker) {
-            this.options.ticker = options.ticker;
-        }
-        else {
-            // to avoid Rollup transforming our import, save pixi namespace in a variable
-            // from here: https://github.com/pixijs/pixi.js/issues/5757
-            let ticker;
-            const pixiNS = PIXI;
-            if (parseInt(/^(\d+)\./.exec(VERSION)[1]) < 5) {
-                ticker = pixiNS.ticker.shared;
-            }
-            else {
-                ticker = pixiNS.Ticker.shared;
-            }
-            this.options.ticker = options.ticker || ticker;
-        }
+        this.options.ticker = options.ticker || Ticker.shared;
 
         /** @type {number} */
         this.screenWidth = this.options.screenWidth;

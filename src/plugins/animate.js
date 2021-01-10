@@ -1,4 +1,4 @@
-import * as PIXI from 'pixi.js'
+import { Point } from '@pixi/math'
 import { Plugin } from './plugin'
 import ease from '../ease'
 
@@ -143,7 +143,7 @@ export class Animate extends Plugin
         }
         else
         {
-            const originalZoom = new PIXI.Point(this.parent.scale.x, this.parent.scale.y)
+            const originalZoom = new Point(this.parent.scale.x, this.parent.scale.y)
             const percent = this.options.ease(this.time, 0, 1, this.options.time)
             if (this.width !== null)
             {
@@ -163,7 +163,7 @@ export class Animate extends Plugin
             }
             if (!this.keepCenter)
             {
-                const original = new PIXI.Point(this.parent.x, this.parent.y)
+                const original = new Point(this.parent.x, this.parent.y)
                 this.parent.moveCenter(this.startX + this.deltaX * percent, this.startY + this.deltaY * percent)
                 this.parent.emit('moved', { viewport: this.parent, original, type: 'animate'})
             }

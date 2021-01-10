@@ -1,4 +1,4 @@
-import * as PIXI from 'pixi.js'
+import { Point } from '@pixi/math'
 import { Plugin } from './plugin'
 import ease from '../ease'
 
@@ -161,11 +161,11 @@ export class Bounce extends Plugin {
                 right: this.parent.right > width,
                 top: this.parent.top < y1,
                 bottom: this.parent.bottom > height,
-                topLeft: new PIXI.Point(
+                topLeft: new Point(
                     x1 * this.parent.scale.x,
                     y1 * this.parent.scale.y
                 ),
-                bottomRight: new PIXI.Point(
+                bottomRight: new Point(
                     width * this.parent.scale.x - this.parent.screenWidth,
                     height * this.parent.scale.y - this.parent.screenHeight
                 )
@@ -176,8 +176,8 @@ export class Bounce extends Plugin {
             right: this.parent.right > this.parent.worldWidth,
             top: this.parent.top < 0,
             bottom: this.parent.bottom > this.parent.worldHeight,
-            topLeft: new PIXI.Point(0, 0),
-            bottomRight: new PIXI.Point(
+            topLeft: new Point(0, 0),
+            bottomRight: new Point(
                 this.parent.worldWidth * this.parent.scale.x - this.parent.screenWidth,
                 this.parent.worldHeight * this.parent.scale.y - this.parent.screenHeight
             )

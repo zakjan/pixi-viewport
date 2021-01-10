@@ -1,4 +1,6 @@
-import * as PIXI from 'pixi.js'
+import { Container } from '@pixi/display'
+import { Point, Rectangle } from '@pixi/math'
+import { Ticker } from '@pixi/ticker'
 
 import { InputManager } from './input-manager'
 import { PluginManager } from './plugin-manager'
@@ -50,7 +52,7 @@ const viewportOptions = {
 /**
  * Main class to use when creating a Viewport
  */
-export class Viewport extends PIXI.Container {
+export class Viewport extends Container {
     /**
      * @param {ViewportOptions} [options]
      * @fires clicked
@@ -88,23 +90,7 @@ export class Viewport extends PIXI.Container {
         super()
         this.options = Object.assign({}, viewportOptions, options)
 
-        // needed to pull this out of viewportOptions because of pixi.js v4 support (which changed from PIXI.ticker.shared to PIXI.Ticker.shared...sigh)
-        if (options.ticker) {
-            this.options.ticker = options.ticker
-        }
-        else {
-            // to avoid Rollup transforming our import, save pixi namespace in a variable
-            // from here: https://github.com/pixijs/pixi.js/issues/5757
-            let ticker
-            const pixiNS = PIXI
-            if (parseInt(/^(\d+)\./.exec(PIXI.VERSION)[1]) < 5) {
-                ticker = pixiNS.ticker.shared
-            }
-            else {
-                ticker = pixiNS.Ticker.shared
-            }
-            this.options.ticker = options.ticker || ticker
-        }
+        this.options.ticker = options.ticker || Ticker.shared
 
         /** @type {number} */
         this.screenWidth = this.options.screenWidth
@@ -189,7 +175,7 @@ export class Viewport extends PIXI.Container {
             }
 
             if (!this.forceHitArea) {
-                this._hitAreaDefault = new PIXI.Rectangle(this.left, this.top, this.worldScreenWidth, this.worldScreenHeight)
+                this._hitAreaDefault = new Rectangle(this.left, this.top, this.worldScreenWidth, this.worldScreenHeight)
                 this.hitArea = this._hitAreaDefault
             }
 
@@ -266,7 +252,7 @@ export class Viewport extends PIXI.Container {
      * @returns {PIXI.Rectangle}
      */
     getVisibleBounds() {
-        return new PIXI.Rectangle(this.left, this.top, this.worldScreenWidth, this.worldScreenHeight)
+        return new Rectangle(this.left, this.top, this.worldScreenWidth, this.worldScreenHeight)
     }
 
     /**
@@ -277,7 +263,7 @@ export class Viewport extends PIXI.Container {
      */
     toWorld(x, y) {
         if (arguments.length === 2) {
-            return this.toLocal(new PIXI.Point(x, y))
+            return this.toLocal(new Point(x, y))
         }
         else {
             return this.toLocal(x)
@@ -292,7 +278,7 @@ export class Viewport extends PIXI.Container {
      */
     toScreen(x, y) {
         if (arguments.length === 2) {
-            return this.toGlobal(new PIXI.Point(x, y))
+            return this.toGlobal(new Point(x, y))
         }
         else {
             return this.toGlobal(x)
@@ -336,7 +322,7 @@ export class Viewport extends PIXI.Container {
      * @type {PIXI.Point}
      */
     get center() {
-        return new PIXI.Point(this.worldScreenWidth / 2 - this.x / this.scale.x, this.worldScreenHeight / 2 - this.y / this.scale.y)
+        return new Point(this.worldScreenWidth / 2 - this.x / this.scale.x, this.worldScreenHeight / 2 - this.y / this.scale.y)
     }
     set center(value) {
         this.moveCenter(value)
@@ -369,7 +355,7 @@ export class Viewport extends PIXI.Container {
      * @type {PIXI.Point}
      */
     get corner() {
-        return new PIXI.Point(-this.x / this.scale.x, -this.y / this.scale.y)
+        return new Point(-this.x / this.scale.x, -this.y / this.scale.y)
     }
     set corner(value) {
         this.moveCorner(value)
@@ -653,7 +639,7 @@ export class Viewport extends PIXI.Container {
             right: this.right > this.worldWidth,
             top: this.top < 0,
             bottom: this.bottom > this._worldHeight,
-            cornerPoint: new PIXI.Point(
+            cornerPoint: new Point(
                 this.worldWidth * this.scale.x - this.screenWidth,
                 this.worldHeight * this.scale.y - this.screenHeight
             )
@@ -734,7 +720,7 @@ export class Viewport extends PIXI.Container {
         }
         else {
             this._forceHitArea = null
-            this.hitArea = new PIXI.Rectangle(0, 0, this.worldWidth, this.worldHeight)
+            this.hitArea = new Rectangle(0, 0, this.worldWidth, this.worldHeight)
         }
     }
 
